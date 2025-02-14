@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Películas KPM</string>
+    <string name="back">Volver atrás</string>
+
+    <string name="original_language">Idioma original</string>
+    <string name="release_title">Título</string>
+    <string name="release_date">Fecha de estreno</string>
+    <string name="popularity">Popularidad</string>
+    <string name="vote_average">Calificación promedio</string>
+
+</resources>
