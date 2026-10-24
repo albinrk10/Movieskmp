@@ -1,4 +1,4 @@
-package io.albin.kmpmovies.data
+package io.albin.kmpmovies.domain.entities
 
 data class Movie(
     val id: Int,
@@ -10,8 +10,5 @@ data class Movie(
     val originalTitle: String,
     val originalLanguage: String,
     val popularity: Double,
-    val voteAverage: Double,
-
+    val voteAverage: Double
 )
-
-

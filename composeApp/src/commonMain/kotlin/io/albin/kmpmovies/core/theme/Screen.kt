@@ -1,4 +1,4 @@
-package io.albin.kmpmovies.ui.Screens
+package io.albin.kmpmovies.core.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,14 +10,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun Screen(modifier: Modifier = Modifier,content: @Composable () -> Unit) {
+fun Screen(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
     val isDarkTheme = isSystemInDarkTheme()
-    val colorScheme =  if (isDarkTheme) darkColorScheme() else lightColorScheme()
-   MaterialTheme (colorScheme){
-       Surface {
-           modifier.fillMaxSize()
-              content()
-       }
-   }
-
+    val colorScheme = if (isDarkTheme) darkColorScheme() else lightColorScheme()
+    MaterialTheme(colorScheme = colorScheme) {
+        Surface(
+            modifier = modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            content()
+        }
+    }
 }

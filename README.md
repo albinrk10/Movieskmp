@@ -14,12 +14,17 @@ Aplicación de películas para Android y iOS desarrollada con **Kotlin Multiplat
 - Ktor para consultar la API de TMDB y Kotlinx Serialization para procesar las respuestas.
 - Coil para cargar las imágenes y Navigation Compose para navegar entre pantallas.
 
-## Estructura del proyecto
+## Estructura del proyecto (Clean Architecture)
 
-- `composeApp/src/commonMain`: interfaz, navegación, modelos y acceso a datos compartidos.
-- `composeApp/src/androidMain`: punto de entrada y configuración específica de Android.
-- `composeApp/src/iosMain`: integración de Compose con iOS.
-- `iosApp`: proyecto de Xcode y punto de entrada de la aplicación iOS.
+El código compartido en `composeApp/src/commonMain` está organizado siguiendo **Clean Architecture**:
+
+- `core/`: Configuración global, navegación ([Navigation.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/core/navigation/Navigation.kt)), rutas seguras ([Routes.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/core/routes/Routes.kt)), constantes ([Constants.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/core/constants/Constants.kt)) y temas.
+- `domain/`: Modelos y entidades de negocio puros ([Movie.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/domain/entities/Movie.kt)), contratos de repositorios ([MoviesRepository.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/domain/repository/MoviesRepository.kt)) y casos de uso ([GetPopularMoviesUseCase.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/domain/usecases/GetPopularMoviesUseCase.kt), [GetMovieDetailUseCase.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/domain/usecases/GetMovieDetailUseCase.kt)).
+- `infrastructure/`: Implementaciones de repositorios ([MoviesRepositoryImpl.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/infrastructure/repositories/MoviesRepositoryImpl.kt)), fuentes de datos Ktor ([MoviesRemoteDataSource.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/infrastructure/datasources/MoviesRemoteDataSource.kt)), DTOs y mappers ([MovieMapper.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/infrastructure/mappers/MovieMapper.kt)).
+- `di/`: Contenedor e inyección de dependencias ([AppContainer.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/di/AppContainer.kt)).
+- `presentation/`: Pantallas Compose ([HomeScreen.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/presentation/screens/home/HomeScreen.kt), [DetailScreen.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/presentation/screens/detail/DetailScreen.kt)), ViewModels ([HomeViewModel.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/presentation/viewmodel/home/HomeViewModel.kt), [DetailViewModel.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/presentation/viewmodel/detail/DetailViewModel.kt)) y componentes reutilizables ([LoadingIndicator.kt](file:///d:/Kmp/Movieskmp/composeApp/src/commonMain/kotlin/io/albin/kmpmovies/presentation/components/LoadingIndicator.kt)).
+- `composeApp/src/androidMain`: Punto de entrada y configuración de Android.
+- `composeApp/src/iosMain` & `iosApp`: Integración y proyecto Xcode para iOS.
 
 ## Ejecutar el proyecto
 

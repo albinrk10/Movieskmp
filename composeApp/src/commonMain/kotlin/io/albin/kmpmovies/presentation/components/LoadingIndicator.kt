@@ -1,4 +1,4 @@
-package io.albin.kmpmovies.ui.common
+package io.albin.kmpmovies.presentation.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,14 +8,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun LoadingIndicator(enabled: Boolean,modifier: Modifier = Modifier) {
+fun LoadingIndicator(
+    enabled: Boolean,
+    modifier: Modifier = Modifier
+) {
     if (enabled) {
-      Box(
+        Box(
             modifier = modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             CircularProgressIndicator()
-
+        }
     }
-  }
 }

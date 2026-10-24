@@ -1,0 +1,8 @@
+package io.albin.kmpmovies.domain.repository
+
+import io.albin.kmpmovies.domain.entities.Movie
+
+interface MoviesRepository {
+    suspend fun getPopularMovies(): List<Movie>
+    suspend fun getMovieById(id: Int): Movie
+}
