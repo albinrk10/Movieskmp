@@ -17,13 +17,11 @@ import io.albin.kmpmovies.ui.Screens.home.HomeViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.albin.kmpmovies.BuildKonfig
 import io.ktor.http.URLProtocol
 import io.ktor.http.append
 import io.ktor.serialization.kotlinx.json.json
-import kmpmovies.composeapp.generated.resources.Res
-import kmpmovies.composeapp.generated.resources.api_key
 import kotlinx.serialization.json.Json
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun Navigation() {
@@ -61,7 +59,7 @@ fun Navigation() {
 
 @Composable
 private fun rememberMoviesRepository(
-    apiKey:String = stringResource(Res.string.api_key)
+    apiKey: String = BuildKonfig.TMDB_API_KEY
 ): MoviesRepository = remember {
     val client =
         HttpClient() {
