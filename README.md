@@ -46,7 +46,6 @@ Compatible con **Android 7.0+ (API 24)** e **iOS 15.3+**
 - Para iOS: macOS, Xcode con herramientas de línea de comandos y un simulador o dispositivo compatible. El repositorio no fija una versión concreta de Xcode.
 - Una clave de API de TMDB y conexión a Internet para descargar dependencias y consultar películas.
 
-No necesitas instalar Gradle por separado: utiliza el wrapper del repositorio.
 
 ## Clonar y configurar
 
@@ -57,11 +56,6 @@ git clone https://github.com/albinrk10/Movieskmp.git
 cd Movieskmp
 ```
 
-En macOS o Linux, si el wrapper no tiene permisos de ejecución:
-
-```bash
-chmod +x gradlew
-```
 
 ### 2. Configurar el SDK y la clave de TMDB
 
