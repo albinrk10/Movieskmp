@@ -1,0 +1,23 @@
+package io.albin.kmpmovies.di
+
+import io.albin.kmpmovies.presentation.viewmodel.detail.DetailViewModel
+import io.albin.kmpmovies.presentation.viewmodel.favorites.FavoritesViewModel
+import io.albin.kmpmovies.presentation.viewmodel.home.HomeViewModel
+import io.albin.kmpmovies.presentation.viewmodel.search.SearchViewModel
+import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.module
+
+val viewModelModule = module {
+    viewModelOf(::HomeViewModel)
+    viewModelOf(::SearchViewModel)
+    viewModelOf(::FavoritesViewModel)
+    factory { (movieId: Int) ->
+        DetailViewModel(
+            id = movieId,
+            getMovieDetailUseCase = get(),
+            getMovieTrailerUseCase = get(),
+            isFavoriteUseCase = get(),
+            toggleFavoriteUseCase = get()
+        )
+    }
+}

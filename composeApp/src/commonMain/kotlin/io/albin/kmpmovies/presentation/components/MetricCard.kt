@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -22,9 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.albin.kmpmovies.core.theme.CinematicDarkSurface
-import io.albin.kmpmovies.core.theme.CinematicGold
-import io.albin.kmpmovies.core.theme.CinematicTextSecondary
+import io.albin.kmpmovies.core.designsystem.AppTheme
 
 @Composable
 fun MetricCard(
@@ -34,9 +31,9 @@ fun MetricCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        shape = RoundedCornerShape(12.dp),
+        shape = AppTheme.shapes.cardCorner,
         colors = CardDefaults.cardColors(
-            containerColor = CinematicDarkSurface
+            containerColor = AppTheme.colors.cardSurface
         ),
         modifier = modifier.fillMaxWidth()
     ) {
@@ -47,7 +44,7 @@ fun MetricCard(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = CinematicGold,
+                tint = AppTheme.colors.actionYellow,
                 modifier = Modifier.size(24.dp)
             )
 
@@ -57,7 +54,7 @@ fun MetricCard(
                 Text(
                     text = label,
                     style = MaterialTheme.typography.labelSmall,
-                    color = CinematicTextSecondary,
+                    color = AppTheme.colors.textMuted,
                     fontSize = 11.sp
                 )
                 Spacer(modifier = Modifier.height(2.dp))
@@ -66,7 +63,7 @@ fun MetricCard(
                     style = MaterialTheme.typography.bodyMedium.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = AppTheme.colors.textPrimary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

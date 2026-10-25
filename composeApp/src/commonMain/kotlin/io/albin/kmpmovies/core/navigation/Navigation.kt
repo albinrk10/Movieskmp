@@ -1,24 +1,25 @@
 package io.albin.kmpmovies.core.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import io.albin.kmpmovies.core.routes.Route
-import io.albin.kmpmovies.di.AppContainer
 import io.albin.kmpmovies.presentation.screens.detail.DetailScreen
+import io.albin.kmpmovies.presentation.screens.favorites.FavoritesScreen
 import io.albin.kmpmovies.presentation.screens.home.HomeScreen
+import io.albin.kmpmovies.presentation.screens.search.SearchScreen
 import io.albin.kmpmovies.presentation.viewmodel.detail.DetailViewModel
+import io.albin.kmpmovies.presentation.viewmodel.favorites.FavoritesViewModel
 import io.albin.kmpmovies.presentation.viewmodel.home.HomeViewModel
+import io.albin.kmpmovies.presentation.viewmodel.search.SearchViewModel
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
-fun Navigation(
-    appContainer: AppContainer
-) {
+fun Navigation() {
     val navController = rememberNavController()
 
     NavHost(
@@ -26,15 +27,43 @@ fun Navigation(
         startDestination = Route.Home.route
     ) {
         composable(Route.Home.route) {
+            val vm = koinViewModel<HomeViewModel>()
             HomeScreen(
+                vm = vm,
                 onMovieClick = { movie ->
                     navController.navigate(Route.Detail.createRoute(movie.id))
                 },
-                vm = viewModel {
-                    HomeViewModel(appContainer.getPopularMoviesUseCase)
+                onSearchClick = {
+                    navController.navigate(Route.Search.route)
+                },
+                onFavoritesClick = {
+                    navController.navigate(Route.Favorites.route)
                 }
             )
         }
+
+        composable(Route.Search.route) {
+            val vm = koinViewModel<SearchViewModel>()
+            SearchScreen(
+                vm = vm,
+                onMovieClick = { movie ->
+                    navController.navigate(Route.Detail.createRoute(movie.id))
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(Route.Favorites.route) {
+            val vm = koinViewModel<FavoritesViewModel>()
+            FavoritesScreen(
+                vm = vm,
+                onMovieClick = { movie ->
+                    navController.navigate(Route.Detail.createRoute(movie.id))
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
         composable(
             route = Route.Detail.route,
             arguments = listOf(
@@ -44,10 +73,12 @@ fun Navigation(
             )
         ) { backStackEntry ->
             val movieId = checkNotNull(backStackEntry.arguments?.getInt("movieId"))
+            val vm = koinViewModel<DetailViewModel>(
+                key = "detail_$movieId",
+                parameters = { parametersOf(movieId) }
+            )
             DetailScreen(
-                vm = viewModel {
-                    DetailViewModel(movieId, appContainer.getMovieDetailUseCase)
-                },
+                vm = vm,
                 onBack = { navController.popBackStack() }
             )
         }

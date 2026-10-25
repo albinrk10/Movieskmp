@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,12 +31,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.albin.kmpmovies.core.theme.CinematicDarkBackground
-import io.albin.kmpmovies.core.theme.CinematicGold
+import io.albin.kmpmovies.core.designsystem.AppTheme
 import io.albin.kmpmovies.core.theme.Screen
 import io.albin.kmpmovies.domain.entities.Movie
 import io.albin.kmpmovies.presentation.components.FilterChipsRow
-import io.albin.kmpmovies.presentation.components.HeroBanner
+import io.albin.kmpmovies.presentation.components.HeroBannerCarousel
 import io.albin.kmpmovies.presentation.components.LoadingIndicator
 import io.albin.kmpmovies.presentation.components.MovieCard
 import io.albin.kmpmovies.presentation.viewmodel.home.HomeViewModel
@@ -44,6 +44,8 @@ import io.albin.kmpmovies.presentation.viewmodel.home.HomeViewModel
 @Composable
 fun HomeScreen(
     onMovieClick: (Movie) -> Unit,
+    onSearchClick: () -> Unit,
+    onFavoritesClick: () -> Unit,
     vm: HomeViewModel
 ) {
     Screen {
@@ -51,7 +53,7 @@ fun HomeScreen(
         val state = vm.state
 
         Scaffold(
-            containerColor = CinematicDarkBackground,
+            containerColor = AppTheme.colors.backgroundDark,
             topBar = {
                 TopAppBar(
                     title = {
@@ -59,10 +61,10 @@ fun HomeScreen(
                             Icon(
                                 imageVector = Icons.Default.Movie,
                                 contentDescription = null,
-                                tint = CinematicGold,
+                                tint = AppTheme.colors.actionYellow,
                                 modifier = Modifier.size(26.dp)
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(AppTheme.spacing.s))
                             Text(
                                 text = "Cinemapedia",
                                 style = MaterialTheme.typography.titleLarge.copy(
@@ -74,16 +76,23 @@ fun HomeScreen(
                         }
                     },
                     actions = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = onSearchClick) {
                             Icon(
                                 imageVector = Icons.Default.Search,
                                 contentDescription = "Buscar",
                                 tint = Color.White
                             )
                         }
+                        IconButton(onClick = onFavoritesClick) {
+                            Icon(
+                                imageVector = Icons.Default.Favorite,
+                                contentDescription = "Mis Favoritos",
+                                tint = AppTheme.colors.favoriteRed
+                            )
+                        }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = CinematicDarkBackground.copy(alpha = 0.95f)
+                        containerColor = AppTheme.colors.backgroundDark.copy(alpha = 0.95f)
                     ),
                     scrollBehavior = scrollBehavior
                 )
@@ -99,16 +108,19 @@ fun HomeScreen(
                         start = 14.dp,
                         end = 14.dp,
                         top = padding.calculateTopPadding(),
-                        bottom = 24.dp
+                        bottom = AppTheme.spacing.l
                     ),
                     horizontalArrangement = Arrangement.spacedBy(14.dp),
                     verticalArrangement = Arrangement.spacedBy(18.dp)
                 ) {
-                    // 1. Hero / Featured Banner
-                    state.featuredMovie?.let { featured ->
+                    // 1. Hero / Featured Carousel
+                    val carouselMovies = state.featuredMovies.ifEmpty {
+                        listOfNotNull(state.featuredMovie)
+                    }
+                    if (carouselMovies.isNotEmpty()) {
                         item(span = { GridItemSpan(maxLineSpan) }) {
-                            HeroBanner(
-                                movie = featured,
+                            HeroBannerCarousel(
+                                movies = carouselMovies,
                                 onDetailsClick = onMovieClick
                             )
                         }
@@ -126,11 +138,15 @@ fun HomeScreen(
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         Text(
                             text = state.selectedFilter.label,
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.Bold
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = (-0.3).sp
                             ),
                             color = Color.White,
-                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                            modifier = Modifier.padding(
+                                top = AppTheme.spacing.xs,
+                                bottom = AppTheme.spacing.xs
+                            )
                         )
                     }
 

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -25,8 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import io.albin.kmpmovies.core.theme.CinematicDarkSurface
-import io.albin.kmpmovies.core.theme.CinematicTextSecondary
+import io.albin.kmpmovies.core.designsystem.AppTheme
 import io.albin.kmpmovies.domain.entities.Movie
 
 @Composable
@@ -38,13 +36,13 @@ fun MovieCard(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(AppTheme.shapes.posterCorner)
             .clickable(onClick = onClick)
     ) {
         Card(
-            shape = RoundedCornerShape(12.dp),
+            shape = AppTheme.shapes.posterCorner,
             colors = CardDefaults.cardColors(
-                containerColor = CinematicDarkSurface
+                containerColor = AppTheme.colors.cardSurface
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
             modifier = Modifier
@@ -63,12 +61,12 @@ fun MovieCard(
                     voteAverage = movie.voteAverage,
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(8.dp)
+                        .padding(AppTheme.spacing.s)
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(AppTheme.spacing.s))
 
         Text(
             text = movie.title,
@@ -76,7 +74,7 @@ fun MovieCard(
                 fontWeight = FontWeight.SemiBold,
                 lineHeight = 18.sp
             ),
-            color = MaterialTheme.colorScheme.onBackground,
+            color = AppTheme.colors.textPrimary,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
@@ -88,13 +86,13 @@ fun MovieCard(
                 Text(
                     text = year,
                     style = MaterialTheme.typography.bodySmall,
-                    color = CinematicTextSecondary
+                    color = AppTheme.colors.textMuted
                 )
                 if (movie.originalLanguage.isNotEmpty()) {
                     Text(
                         text = " • ${movie.originalLanguage.uppercase()}",
                         style = MaterialTheme.typography.bodySmall,
-                        color = CinematicTextSecondary
+                        color = AppTheme.colors.textMuted
                     )
                 }
             }

@@ -32,12 +32,13 @@ class HomeViewModel(
             state = state.copy(loading = true, error = null)
             try {
                 val movies = getPopularMoviesUseCase()
-                val featured = movies.maxByOrNull { it.popularity } ?: movies.firstOrNull()
+                val featuredList = movies.sortedByDescending { it.popularity }.take(6)
                 state = state.copy(
                     loading = false,
                     rawMovies = movies,
                     filteredMovies = applyFilter(movies, state.selectedFilter),
-                    featuredMovie = featured
+                    featuredMovie = featuredList.firstOrNull(),
+                    featuredMovies = featuredList
                 )
             } catch (e: Exception) {
                 state = state.copy(
@@ -68,6 +69,7 @@ class HomeViewModel(
         val rawMovies: List<Movie> = emptyList(),
         val filteredMovies: List<Movie> = emptyList(),
         val featuredMovie: Movie? = null,
+        val featuredMovies: List<Movie> = emptyList(),
         val selectedFilter: MovieFilter = MovieFilter.ALL,
         val error: String? = null
     ) {

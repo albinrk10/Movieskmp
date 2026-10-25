@@ -13,7 +13,8 @@ import androidx.core.view.WindowCompat
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         enableEdgeToEdge()
+        io.albin.kmpmovies.infrastructure.datasources.AndroidAppContext.init(applicationContext)
+        enableEdgeToEdge()
         setContent {
             EnableTransparentStatusBar()
             App()

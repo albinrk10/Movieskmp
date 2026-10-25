@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -43,27 +42,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import io.albin.kmpmovies.core.theme.CinematicDarkBackground
-import io.albin.kmpmovies.core.theme.CinematicDarkSurface
-import io.albin.kmpmovies.core.theme.CinematicDarkSurfaceVariant
-import io.albin.kmpmovies.core.theme.CinematicGold
-import io.albin.kmpmovies.core.theme.CinematicRed
-import io.albin.kmpmovies.core.theme.CinematicStar
-import io.albin.kmpmovies.core.theme.CinematicTextSecondary
+import io.albin.kmpmovies.core.designsystem.AppTheme
 import io.albin.kmpmovies.core.theme.Screen
 import io.albin.kmpmovies.domain.entities.Movie
 import io.albin.kmpmovies.presentation.components.LoadingIndicator
@@ -78,11 +67,11 @@ fun DetailScreen(
     onBack: () -> Unit
 ) {
     val state = vm.state
-    var isFavorite by remember { mutableStateOf(false) }
+    val uriHandler = LocalUriHandler.current
 
     Screen {
         Scaffold(
-            containerColor = CinematicDarkBackground
+            containerColor = AppTheme.colors.backgroundDark
         ) { padding ->
             LoadingIndicator(enabled = state.loading)
 
@@ -91,7 +80,7 @@ fun DetailScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
-                        .padding(bottom = 36.dp)
+                        .padding(bottom = AppTheme.spacing.xl)
                 ) {
                     // 1. Immersive Header (Backdrop + Gradients + Floating Controls)
                     Box(
@@ -115,8 +104,8 @@ fun DetailScreen(
                                         colors = listOf(
                                             Color.Black.copy(alpha = 0.65f),
                                             Color.Transparent,
-                                            CinematicDarkBackground.copy(alpha = 0.6f),
-                                            CinematicDarkBackground
+                                            AppTheme.colors.backgroundDark.copy(alpha = 0.6f),
+                                            AppTheme.colors.backgroundDark
                                         )
                                     )
                                 )
@@ -127,7 +116,7 @@ fun DetailScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .statusBarsPadding()
-                                .padding(horizontal = 16.dp, vertical = 10.dp),
+                                .padding(horizontal = AppTheme.spacing.m, vertical = 10.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -150,11 +139,11 @@ fun DetailScreen(
                                 color = Color.Black.copy(alpha = 0.55f),
                                 modifier = Modifier.size(42.dp)
                             ) {
-                                IconButton(onClick = { isFavorite = !isFavorite }) {
+                                IconButton(onClick = vm::toggleFavorite) {
                                     Icon(
-                                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                        imageVector = if (state.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                                         contentDescription = "Favorito",
-                                        tint = if (isFavorite) CinematicRed else Color.White
+                                        tint = if (state.isFavorite) AppTheme.colors.favoriteRed else Color.White
                                     )
                                 }
                             }
@@ -165,13 +154,13 @@ fun DetailScreen(
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
+                                .padding(horizontal = AppTheme.spacing.m),
                             verticalAlignment = Alignment.Bottom
                         ) {
                             Card(
-                                shape = RoundedCornerShape(12.dp),
+                                shape = AppTheme.shapes.posterCorner,
                                 elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                                colors = CardDefaults.cardColors(containerColor = CinematicDarkSurface),
+                                colors = CardDefaults.cardColors(containerColor = AppTheme.colors.cardSurface),
                                 modifier = Modifier
                                     .width(110.dp)
                                     .height(165.dp)
@@ -200,104 +189,126 @@ fun DetailScreen(
 
                                 // Inline Info Row: Year • Language • Rating
                                 val year = movie.releaseDate.take(4)
-                                val score = round(movie.voteAverage * 10) / 10.0
 
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     if (year.isNotEmpty()) {
                                         Text(
                                             text = year,
                                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
-                                            color = CinematicTextSecondary
+                                            color = AppTheme.colors.textMuted
                                         )
                                         Text(
                                             text = "  •  ",
-                                            color = CinematicTextSecondary
+                                            color = AppTheme.colors.textMuted
                                         )
                                     }
 
                                     Text(
                                         text = movie.originalLanguage.uppercase(),
                                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                                        color = CinematicTextSecondary
+                                        color = AppTheme.colors.textMuted
                                     )
 
                                     Text(
                                         text = "  •  ",
-                                        color = CinematicTextSecondary
+                                        color = AppTheme.colors.textMuted
                                     )
 
-                                    Icon(
-                                        imageVector = Icons.Default.Star,
-                                        contentDescription = null,
-                                        tint = CinematicStar,
-                                        modifier = Modifier.size(15.dp)
-                                    )
-                                    Spacer(modifier = Modifier.width(3.dp))
-                                    Text(
-                                        text = "$score / 10",
-                                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                                        color = Color.White
-                                    )
+                                    if (movie.voteAverage <= 0.0) {
+                                        Icon(
+                                            imageVector = Icons.Default.CalendarToday,
+                                            contentDescription = null,
+                                            tint = AppTheme.colors.actionYellow,
+                                            modifier = Modifier.size(13.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(3.dp))
+                                        Text(
+                                            text = "Próximamente",
+                                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                                            color = AppTheme.colors.actionYellow
+                                        )
+                                    } else {
+                                        val score = round(movie.voteAverage * 10) / 10.0
+                                        Icon(
+                                            imageVector = Icons.Default.Star,
+                                            contentDescription = null,
+                                            tint = AppTheme.colors.starAmber,
+                                            modifier = Modifier.size(15.dp)
+                                        )
+                                        Spacer(modifier = Modifier.width(3.dp))
+                                        Text(
+                                            text = "$score / 10",
+                                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                                            color = Color.White
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(AppTheme.spacing.m))
 
-                    // 2. Action Buttons (Primary "Ver Tráiler", Secondary "Favoritos" & "Compartir")
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Button(
-                            onClick = {},
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = CinematicGold,
-                                contentColor = Color.Black
-                            ),
-                            shape = RoundedCornerShape(12.dp),
+                    // 2. Action Buttons (Shown ONLY if trailerKey != null)
+                    state.trailerKey?.let { key ->
+                        val youtubeUrl = "https://www.youtube.com/watch?v=$key"
+                        Row(
                             modifier = Modifier
-                                .weight(1f)
-                                .height(46.dp)
+                                .fillMaxWidth()
+                                .padding(horizontal = AppTheme.spacing.m),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.PlayArrow,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text(
-                                text = "Ver Tráiler",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp
-                            )
+                            Button(
+                                onClick = {
+                                    uriHandler.openUri(youtubeUrl)
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = AppTheme.colors.actionYellow,
+                                    contentColor = Color.Black
+                                ),
+                                shape = AppTheme.shapes.cardCorner,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(46.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.PlayArrow,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(
+                                    text = "Ver Tráiler",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 14.sp
+                                )
+                            }
+
+                            OutlinedButton(
+                                onClick = {
+                                    uriHandler.openUri(youtubeUrl)
+                                },
+                                shape = AppTheme.shapes.cardCorner,
+                                modifier = Modifier.height(46.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Share,
+                                    contentDescription = "Compartir",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
                         }
 
-                        OutlinedButton(
-                            onClick = {},
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.height(46.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Share,
-                                contentDescription = "Compartir",
-                                tint = Color.White,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
+                        Spacer(modifier = Modifier.height(AppTheme.spacing.m))
                     }
-
-                    Spacer(modifier = Modifier.height(16.dp))
 
                     // 3. Category Chips
                     FlowRow(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            .padding(horizontal = AppTheme.spacing.m),
+                        horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.s)
                     ) {
                         listOf("Película", "Estreno", "Cine").forEach { tag ->
                             AssistChip(
@@ -305,26 +316,26 @@ fun DetailScreen(
                                 label = {
                                     Text(
                                         text = tag,
-                                        color = CinematicTextSecondary,
+                                        color = AppTheme.colors.textMuted,
                                         fontSize = 12.sp
                                     )
                                 },
-                                shape = RoundedCornerShape(16.dp),
+                                shape = AppTheme.shapes.chipCorner,
                                 colors = AssistChipDefaults.assistChipColors(
-                                    containerColor = CinematicDarkSurfaceVariant
+                                    containerColor = AppTheme.colors.surfaceVariant
                                 ),
                                 border = null
                             )
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(AppTheme.spacing.m))
 
                     // 4. Synopsis / Overview
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
+                            .padding(horizontal = AppTheme.spacing.m)
                     ) {
                         Text(
                             text = "Sinopsis",
@@ -333,7 +344,7 @@ fun DetailScreen(
                             ),
                             color = Color.White
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(AppTheme.spacing.s))
                         Text(
                             text = if (movie.overview.isNotBlank()) movie.overview else "No hay descripción disponible para esta película.",
                             style = MaterialTheme.typography.bodyMedium.copy(
@@ -343,13 +354,13 @@ fun DetailScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(AppTheme.spacing.l))
 
                     // 5. Technical Metrics Grid
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
+                            .padding(horizontal = AppTheme.spacing.m)
                     ) {
                         Text(
                             text = "Información Técnica",
@@ -372,11 +383,17 @@ fun DetailScreen(
                                 modifier = Modifier.weight(1f)
                             )
 
-                            val score = round(movie.voteAverage * 10) / 10.0
+                            val ratingValue = if (movie.voteAverage <= 0.0) {
+                                "Próximamente"
+                            } else {
+                                val score = round(movie.voteAverage * 10) / 10.0
+                                "$score / 10"
+                            }
+
                             MetricCard(
                                 icon = Icons.Default.Star,
                                 label = "Calificación",
-                                value = "$score / 10",
+                                value = ratingValue,
                                 modifier = Modifier.weight(1f)
                             )
                         }
