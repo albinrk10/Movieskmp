@@ -1,4 +1,4 @@
-package io.albin.kmpmovies.presentation.screens.home
+package io.albin.kmpmovies.presentation.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,6 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,7 +40,7 @@ import io.albin.kmpmovies.presentation.components.FilterChipsRow
 import io.albin.kmpmovies.presentation.components.HeroBannerCarousel
 import io.albin.kmpmovies.presentation.components.LoadingIndicator
 import io.albin.kmpmovies.presentation.components.MovieCard
-import io.albin.kmpmovies.presentation.viewmodel.home.HomeViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,11 +48,11 @@ fun HomeScreen(
     onMovieClick: (Movie) -> Unit,
     onSearchClick: () -> Unit,
     onFavoritesClick: () -> Unit,
-    vm: HomeViewModel
+    vm: HomeViewModel = koinViewModel()
 ) {
     Screen {
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-        val state = vm.state
+        val uiState by vm.uiState.collectAsState()
 
         Scaffold(
             containerColor = AppTheme.colors.backgroundDark,
@@ -99,9 +101,9 @@ fun HomeScreen(
             },
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { padding ->
-            LoadingIndicator(enabled = state.loading)
+            LoadingIndicator(enabled = uiState.loading)
 
-            if (!state.loading) {
+            if (!uiState.loading) {
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 150.dp),
                     contentPadding = PaddingValues(
@@ -114,8 +116,8 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.spacedBy(18.dp)
                 ) {
                     // 1. Hero / Featured Carousel
-                    val carouselMovies = state.featuredMovies.ifEmpty {
-                        listOfNotNull(state.featuredMovie)
+                    val carouselMovies = uiState.featuredMovies.ifEmpty {
+                        listOfNotNull(uiState.featuredMovie)
                     }
                     if (carouselMovies.isNotEmpty()) {
                         item(span = { GridItemSpan(maxLineSpan) }) {
@@ -129,7 +131,7 @@ fun HomeScreen(
                     // 2. Filter category chips
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         FilterChipsRow(
-                            selectedFilter = state.selectedFilter,
+                            selectedFilter = uiState.selectedFilter,
                             onFilterSelected = vm::onFilterSelected
                         )
                     }
@@ -137,7 +139,7 @@ fun HomeScreen(
                     // 3. Section Title
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         Text(
-                            text = state.selectedFilter.label,
+                            text = uiState.selectedFilter.label,
                             style = MaterialTheme.typography.titleLarge.copy(
                                 fontWeight = FontWeight.Bold,
                                 letterSpacing = (-0.3).sp
@@ -151,7 +153,7 @@ fun HomeScreen(
                     }
 
                     // 4. Movies Grid
-                    items(state.movies, key = { it.id }) { movie ->
+                    items(uiState.movies, key = { it.id }) { movie ->
                         MovieCard(
                             movie = movie,
                             onClick = { onMovieClick(movie) }

@@ -6,6 +6,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import io.albin.kmpmovies.core.designsystem.AppTheme
 
 @Composable
 fun LoadingIndicator(
@@ -17,7 +18,7 @@ fun LoadingIndicator(
             modifier = modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = AppTheme.colors.actionYellow)
         }
     }
 }

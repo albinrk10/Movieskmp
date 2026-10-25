@@ -7,14 +7,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import io.albin.kmpmovies.core.routes.Route
-import io.albin.kmpmovies.presentation.screens.detail.DetailScreen
-import io.albin.kmpmovies.presentation.screens.favorites.FavoritesScreen
-import io.albin.kmpmovies.presentation.screens.home.HomeScreen
-import io.albin.kmpmovies.presentation.screens.search.SearchScreen
-import io.albin.kmpmovies.presentation.viewmodel.detail.DetailViewModel
-import io.albin.kmpmovies.presentation.viewmodel.favorites.FavoritesViewModel
-import io.albin.kmpmovies.presentation.viewmodel.home.HomeViewModel
-import io.albin.kmpmovies.presentation.viewmodel.search.SearchViewModel
+import io.albin.kmpmovies.presentation.detail.DetailScreen
+import io.albin.kmpmovies.presentation.detail.DetailViewModel
+import io.albin.kmpmovies.presentation.favorites.FavoritesScreen
+import io.albin.kmpmovies.presentation.favorites.FavoritesViewModel
+import io.albin.kmpmovies.presentation.home.HomeScreen
+import io.albin.kmpmovies.presentation.home.HomeViewModel
+import io.albin.kmpmovies.presentation.search.SearchScreen
+import io.albin.kmpmovies.presentation.search.SearchViewModel
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 

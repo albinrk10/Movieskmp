@@ -1,4 +1,4 @@
-package io.albin.kmpmovies.presentation.screens.favorites
+package io.albin.kmpmovies.presentation.favorites
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,17 +37,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.albin.kmpmovies.core.designsystem.AppTheme
 import io.albin.kmpmovies.domain.entities.Movie
+import io.albin.kmpmovies.presentation.components.LoadingIndicator
 import io.albin.kmpmovies.presentation.components.MovieCard
-import io.albin.kmpmovies.presentation.viewmodel.favorites.FavoritesViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesScreen(
-    vm: FavoritesViewModel,
     onMovieClick: (Movie) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    vm: FavoritesViewModel = koinViewModel()
 ) {
-    val favorites by vm.favorites.collectAsState()
+    val uiState by vm.uiState.collectAsState()
+    val favorites = uiState.favorites
 
     Scaffold(
         containerColor = AppTheme.colors.backgroundDark,
@@ -100,7 +102,9 @@ fun FavoritesScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            if (favorites.isEmpty()) {
+            LoadingIndicator(enabled = uiState.loading && favorites.isEmpty())
+
+            if (!uiState.loading && favorites.isEmpty()) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()

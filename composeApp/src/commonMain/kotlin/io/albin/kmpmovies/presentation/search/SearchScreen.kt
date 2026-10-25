@@ -1,6 +1,5 @@
-package io.albin.kmpmovies.presentation.screens.search
+package io.albin.kmpmovies.presentation.search
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,20 +37,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.albin.kmpmovies.core.designsystem.AppTheme
 import io.albin.kmpmovies.core.theme.Screen
 import io.albin.kmpmovies.domain.entities.Movie
 import io.albin.kmpmovies.presentation.components.LoadingIndicator
 import io.albin.kmpmovies.presentation.components.MovieCard
-import io.albin.kmpmovies.presentation.viewmodel.search.SearchUiState
-import io.albin.kmpmovies.presentation.viewmodel.search.SearchViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SearchScreen(
-    vm: SearchViewModel,
     onMovieClick: (Movie) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    vm: SearchViewModel = koinViewModel()
 ) {
     val query by vm.query.collectAsState()
     val uiState by vm.uiState.collectAsState()
@@ -77,7 +74,7 @@ fun SearchScreen(
 
                     TextField(
                         value = query,
-                        onValueChange = vm::onQueryChange,
+                        onValueChange = vm::onQueryChanged,
                         placeholder = {
                             Text(
                                 text = "Buscar películas...",

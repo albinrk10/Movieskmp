@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import io.albin.kmpmovies.core.designsystem.AppTheme
-import io.albin.kmpmovies.presentation.viewmodel.home.MovieFilter
+import io.albin.kmpmovies.presentation.home.MovieFilter
 
 @Composable
 fun FilterChipsRow(

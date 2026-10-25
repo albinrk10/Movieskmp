@@ -1,4 +1,4 @@
-package io.albin.kmpmovies.presentation.screens.detail
+package io.albin.kmpmovies.presentation.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -42,6 +42,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -57,7 +59,6 @@ import io.albin.kmpmovies.core.theme.Screen
 import io.albin.kmpmovies.domain.entities.Movie
 import io.albin.kmpmovies.presentation.components.LoadingIndicator
 import io.albin.kmpmovies.presentation.components.MetricCard
-import io.albin.kmpmovies.presentation.viewmodel.detail.DetailViewModel
 import kotlin.math.round
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -66,16 +67,16 @@ fun DetailScreen(
     vm: DetailViewModel,
     onBack: () -> Unit
 ) {
-    val state = vm.state
+    val uiState by vm.uiState.collectAsState()
     val uriHandler = LocalUriHandler.current
 
     Screen {
         Scaffold(
             containerColor = AppTheme.colors.backgroundDark
         ) { padding ->
-            LoadingIndicator(enabled = state.loading)
+            LoadingIndicator(enabled = uiState.loading)
 
-            state.movie?.let { movie ->
+            uiState.movie?.let { movie ->
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -141,9 +142,9 @@ fun DetailScreen(
                             ) {
                                 IconButton(onClick = vm::toggleFavorite) {
                                     Icon(
-                                        imageVector = if (state.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                        imageVector = if (uiState.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                                         contentDescription = "Favorito",
-                                        tint = if (state.isFavorite) AppTheme.colors.favoriteRed else Color.White
+                                        tint = if (uiState.isFavorite) AppTheme.colors.favoriteRed else Color.White
                                     )
                                 }
                             }
@@ -250,7 +251,7 @@ fun DetailScreen(
                     Spacer(modifier = Modifier.height(AppTheme.spacing.m))
 
                     // 2. Action Buttons (Shown ONLY if trailerKey != null)
-                    state.trailerKey?.let { key ->
+                    uiState.trailerKey?.let { key ->
                         val youtubeUrl = "https://www.youtube.com/watch?v=$key"
                         Row(
                             modifier = Modifier

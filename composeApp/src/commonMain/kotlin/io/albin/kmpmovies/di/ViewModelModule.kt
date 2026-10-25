@@ -1,9 +1,9 @@
 package io.albin.kmpmovies.di
 
-import io.albin.kmpmovies.presentation.viewmodel.detail.DetailViewModel
-import io.albin.kmpmovies.presentation.viewmodel.favorites.FavoritesViewModel
-import io.albin.kmpmovies.presentation.viewmodel.home.HomeViewModel
-import io.albin.kmpmovies.presentation.viewmodel.search.SearchViewModel
+import io.albin.kmpmovies.presentation.detail.DetailViewModel
+import io.albin.kmpmovies.presentation.favorites.FavoritesViewModel
+import io.albin.kmpmovies.presentation.home.HomeViewModel
+import io.albin.kmpmovies.presentation.search.SearchViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
