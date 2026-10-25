@@ -192,38 +192,3 @@ Las pruebas existentes cubren carga y filtros de inicio, estados y debounce de b
 ```
 
 Las pruebas del cliente remoto usan respuestas simuladas y no necesitan una clave real. Las pruebas de favoritos con DAO falso no verifican el motor SQLite real.
-
-## Agregar o actualizar capturas
-
-Guarda las imágenes en `docs/screenshots/` y actualiza la tabla del inicio. Con la app abierta en Android y `adb` disponible:
-
-```bash
-adb devices
-adb exec-out screencap -p > docs/screenshots/android-inicio.png
-```
-
-Navega a cada pantalla y repite cambiando el nombre por `android-detalle.png`, `android-busqueda.png` o `android-favoritos.png`. Si hay varios dispositivos, añade `-s ID_DEL_DISPOSITIVO` después de `adb`. Usa una terminal que conserve la salida binaria al redirigir PNG.
-
-Para iOS, con un simulador iniciado:
-
-```bash
-xcrun simctl io booted screenshot docs/screenshots/ios-inicio.png
-```
-
-Navega a cada pantalla y repite cambiando el nombre por `ios-detalle.png`, `ios-busqueda.png` o `ios-favoritos.png`. Las imágenes de ambas plataformas ya están enlazadas en la tabla del inicio. Evita capturar claves u otros datos privados.
-
-## Solución de problemas
-
-| Síntoma | Comprobación |
-| --- | --- |
-| `Permission denied` al ejecutar el wrapper | Ejecuta `chmod +x gradlew` en macOS/Linux. |
-| Gradle informa un JDK incompatible | Usa JDK 17 y revisa `JAVA_HOME` o la configuración del IDE. |
-| No se encuentra el Android SDK | Revisa `sdk.dir` y que la plataforma 34 esté instalada. |
-| El catálogo no carga o la búsqueda falla | Revisa conexión y API key; el inicio todavía no presenta el error guardado en su estado. |
-| Cambiar la variable de TMDB no tiene efecto | Revisa si `local.properties` la sobrescribe y vuelve a compilar. |
-| La instalación o las pruebas no encuentran dispositivo | Inicia un emulador o conecta un dispositivo autorizado; comprueba `adb devices`. |
-| Xcode no puede ejecutar Gradle | Revisa permisos de `gradlew`, JDK y acceso a las herramientas de construcción. |
-
-## Créditos
-
-Datos e imágenes de películas procedentes de [The Movie Database](https://www.themoviedb.org/). Los enlaces de tráileres se abren en YouTube cuando existe un video disponible.
