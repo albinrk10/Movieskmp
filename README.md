@@ -33,7 +33,7 @@ Los filtros trabajan sobre la lista descargada: Mejor valoradas ordena por puntu
 - **Kotlin Multiplatform (KMP): 2.1.0**.
 - **Compose Multiplatform: 1.7.0**.
 - **Gradle: 8.9** · **Android Gradle Plugin: 8.5.2**.
-- **Ktor, Koin , Room
+- **Ktor, Koin , Room**.
 
 Compatible con **Android 7.0+ (API 24)** e **iOS 15.3+**
 
