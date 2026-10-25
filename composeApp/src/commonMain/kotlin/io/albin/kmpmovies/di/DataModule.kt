@@ -33,6 +33,7 @@ val dataModule = module {
                     protocol = URLProtocol.HTTPS
                     host = Constants.TMDB_BASE_HOST
                     parameters.append("api_key", BuildKonfig.TMDB_API_KEY)
+                    parameters.append("language", "es-ES")
                 }
             }
         }

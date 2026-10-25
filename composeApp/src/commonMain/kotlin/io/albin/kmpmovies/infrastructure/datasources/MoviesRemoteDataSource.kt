@@ -41,7 +41,9 @@ class KtorMoviesRemoteDataSource(
 
     override suspend fun fetchMovieVideos(movieId: Int): VideosResult {
         return client
-            .get("/3/movie/$movieId/videos")
+            .get("/3/movie/$movieId/videos") {
+                parameter("include_video_language", "es,en")
+            }
             .body()
     }
 }

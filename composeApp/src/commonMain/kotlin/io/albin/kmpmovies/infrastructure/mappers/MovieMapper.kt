@@ -7,7 +7,7 @@ import io.albin.kmpmovies.infrastructure.models.RemoteMovie
 fun RemoteMovie.toDomain(): Movie = Movie(
     id = id,
     title = title,
-    overview = overview,
+    overview = if (overview.isNotBlank()) overview else "Sin sinopsis disponible en español.",
     releaseDate = releaseDate,
     poster = if (!posterPath.isNullOrEmpty()) "${Constants.IMAGE_BASE_URL_W185}/$posterPath" else "",
     backdrop = backdropPath?.let { "${Constants.IMAGE_BASE_URL_W780}/$it" },
