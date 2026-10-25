@@ -61,7 +61,7 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `when onQueryChanged is called with matching query, debounce triggers Success`() = runTest(testDispatcher) {
+    fun `when onQueryChanged is called with matching query debounce triggers Success`() = runTest(testDispatcher) {
         val viewModel = SearchViewModel(searchMoviesUseCase)
 
         viewModel.uiState.test {
@@ -81,7 +81,7 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `when onQueryChanged finds no matches, emits Empty`() = runTest(testDispatcher) {
+    fun `when onQueryChanged finds no matches emits Empty`() = runTest(testDispatcher) {
         val viewModel = SearchViewModel(searchMoviesUseCase)
 
         viewModel.uiState.test {
@@ -97,7 +97,7 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `when clearQuery is called, query is reset and state returns to Idle`() = runTest(testDispatcher) {
+    fun `when clearQuery is called query is reset and state returns to Idle`() = runTest(testDispatcher) {
         val viewModel = SearchViewModel(searchMoviesUseCase)
 
         viewModel.onQueryChanged("Spider")

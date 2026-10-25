@@ -69,7 +69,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `when HomeViewModel initializes, it loads movies and selects featured movie by popularity`() = runTest(testDispatcher) {
+    fun `when HomeViewModel initializes it loads movies and selects featured movie by popularity`() = runTest(testDispatcher) {
         val viewModel = HomeViewModel(getPopularMoviesUseCase)
 
         viewModel.uiState.test {
@@ -90,7 +90,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `when TOP_RATED filter is selected, movies are sorted by voteAverage descending`() = runTest(testDispatcher) {
+    fun `when TOP_RATED filter is selected movies are sorted by voteAverage descending`() = runTest(testDispatcher) {
         val viewModel = HomeViewModel(getPopularMoviesUseCase)
         advanceUntilIdle()
 
@@ -105,7 +105,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `when loadMovies fails, uiState emits error message and loading false`() = runTest(testDispatcher) {
+    fun `when loadMovies fails uiState emits error message and loading false`() = runTest(testDispatcher) {
         fakeRepository.shouldThrowError = true
         val viewModel = HomeViewModel(getPopularMoviesUseCase)
 
