@@ -33,11 +33,9 @@ Los filtros trabajan sobre la lista descargada: Mejor valoradas ordena por puntu
 - **Kotlin Multiplatform (KMP): 2.1.0**.
 - **Compose Multiplatform: 1.7.0**.
 - **Gradle: 8.9** · **Android Gradle Plugin: 8.5.2**.
-- **Ktor: 2.3.11** para consumir la API.
-- **Koin: 4.0.0** para inyección de dependencias.
-- **Room: 2.7.0** para favoritos locales.
+- **Ktor, Koin , Room
 
-Compatible con **Android 7.0+ (API 24)** e **iOS 15.3+**. Android usa compileSdk y targetSdk **34**. Todas las dependencias están en [libs.versions.toml](gradle/libs.versions.toml).
+Compatible con **Android 7.0+ (API 24)** e **iOS 15.3+**
 
 ## Requisitos
 
